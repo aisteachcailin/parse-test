@@ -5,6 +5,7 @@ export default function App() {
   const [test, setTest] = useState([])
   const [grade, setGrade] = useState(null)
   const [showResults, setShowResults] = useState(false)
+  const [showAnswers, setShowAnswers] = useState()
 
   function parseFile() {
     const fileInput = document.getElementById('fileInput')
@@ -41,13 +42,16 @@ export default function App() {
     const checkedAnswers = [...document.querySelectorAll('.option:checked')].map(btn => btn.parentNode.textContent)
     const correctAnswers = test.flatMap(answer => answer.arrAnswers
       .filter(item => item.includes('*'))
-      .map(item => item.replace('*', '')))
+      .map(item => item.replace('*', ''))
+    )
 
     const results = []
 
     for (let i = 0; i < correctAnswers.length; i++) {
       correctAnswers[i] === checkedAnswers[i] ? results.push(1) : results.push(0)
     }
+
+    setShowAnswers(`Правильные ответы: ${correctAnswers}`)
 
     const numbCorrectAnswers = results.reduce((acc, number) => acc + number, 0)
     const numbQuestions = correctAnswers.length
@@ -83,6 +87,7 @@ export default function App() {
             ))}
             {showResults && <button type='submit'>Завершить тестирование</button>}
             {showResults && <p>{grade}</p>}
+            {showResults && <div>{showAnswers}</div>}
           </form>
       </div>
     </>
